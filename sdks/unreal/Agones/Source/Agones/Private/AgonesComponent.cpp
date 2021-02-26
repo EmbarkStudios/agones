@@ -52,7 +52,7 @@ void UAgonesComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 FHttpRequestRef UAgonesComponent::BuildAgonesRequest(const FString Path, const FHttpVerb Verb, const FString Content)
 {
 	FHttpModule* Http = &FHttpModule::Get();
-	FHttpRequestRef Request = Http->CreateRequest();
+	auto Request = Http->CreateRequest();
 	Request->SetURL(FString::Format(TEXT("http://localhost:{0}/{1}"), {*HttpPort, *Path}));
 	Request->SetVerb(Verb.ToString());
 	Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
@@ -147,7 +147,7 @@ void UAgonesComponent::GameServer(const FGameServerDelegate SuccessDelegate, con
 }
 
 void UAgonesComponent::SetLabel(
-	FString& Key, FString& Value, const FSetLabelDelegate SuccessDelegate, const FAgonesErrorDelegate ErrorDelegate)
+	const FString& Key, const FString& Value, const FSetLabelDelegate SuccessDelegate, const FAgonesErrorDelegate ErrorDelegate)
 {
 	const FKeyValuePair Label = {Key, Value};
 	FString Json;
@@ -224,7 +224,7 @@ void UAgonesComponent::Shutdown(const FShutdownDelegate SuccessDelegate, const F
 }
 
 void UAgonesComponent::SetAnnotation(
-	FString& Key, FString& Value, const FSetAnnotationDelegate SuccessDelegate, const FAgonesErrorDelegate ErrorDelegate)
+	const FString& Key, const FString& Value, const FSetAnnotationDelegate SuccessDelegate, const FAgonesErrorDelegate ErrorDelegate)
 {
 	const FKeyValuePair Label = {Key, Value};
 	FString Json;
