@@ -15,11 +15,11 @@
 use crate::errors::Result;
 use tonic::transport::Channel;
 
-mod api {
+pub mod proto {
     tonic::include_proto!("agones.dev.sdk.alpha");
 }
 
-use api::sdk_client::SdkClient;
+use proto::sdk_client::SdkClient;
 
 /// Alpha is an instance of the Agones Alpha SDK
 #[derive(Clone)]
@@ -42,7 +42,7 @@ impl Alpha {
     pub async fn get_player_capacity(&mut self) -> Result<i64> {
         Ok(self
             .client
-            .get_player_capacity(api::Empty {})
+            .get_player_capacity(proto::Empty {})
             .await
             .map(|c| c.into_inner().count)?)
     }
@@ -52,7 +52,7 @@ impl Alpha {
     pub async fn set_player_capacity(&mut self, count: i64) -> Result<()> {
         Ok(self
             .client
-            .set_player_capacity(api::Count { count })
+            .set_player_capacity(proto::Count { count })
             .await
             .map(|_| ())?)
     }
@@ -66,7 +66,7 @@ impl Alpha {
     pub async fn player_connect(&mut self, id: impl Into<String>) -> Result<bool> {
         Ok(self
             .client
-            .player_connect(api::PlayerId {
+            .player_connect(proto::PlayerId {
                 player_id: id.into(),
             })
             .await
@@ -82,7 +82,7 @@ impl Alpha {
     pub async fn player_disconnect(&mut self, id: impl Into<String>) -> Result<bool> {
         Ok(self
             .client
-            .player_disconnect(api::PlayerId {
+            .player_disconnect(proto::PlayerId {
                 player_id: id.into(),
             })
             .await
@@ -94,7 +94,7 @@ impl Alpha {
     pub async fn get_player_count(&mut self) -> Result<i64> {
         Ok(self
             .client
-            .get_player_count(api::Empty {})
+            .get_player_count(proto::Empty {})
             .await
             .map(|c| c.into_inner().count)?)
     }
@@ -106,7 +106,7 @@ impl Alpha {
     pub async fn is_player_connected(&mut self, id: impl Into<String>) -> Result<bool> {
         Ok(self
             .client
-            .is_player_connected(api::PlayerId {
+            .is_player_connected(proto::PlayerId {
                 player_id: id.into(),
             })
             .await
@@ -120,7 +120,7 @@ impl Alpha {
     pub async fn get_connected_players(&mut self) -> Result<Vec<String>> {
         Ok(self
             .client
-            .get_connected_players(api::Empty {})
+            .get_connected_players(proto::Empty {})
             .await
             .map(|pl| pl.into_inner().list)?)
     }
